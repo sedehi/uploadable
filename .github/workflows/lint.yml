@@ -1,12 +1,20 @@
-on: [push, pull_request]
-name: Main
+on: [push]
+name: Check & fix styling
 jobs:
   php-cs-fixer:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: PHP-CS-Fixer
+        with:
+            ref: ${{ github.head_ref }}
+
+      - name: Run php-cs-fixer
         uses: docker://oskarstark/php-cs-fixer-ga
         with:
           args: --config=.php-cs-fixer.dist.php --diff --dry-run
+
+      - uses: stefanzweifel/git-auto-commit-action@v4.1.2
+        with:
+          commit_message: Apply php-cs-fixer changes
+          branch: ${{ github.head_ref }}
