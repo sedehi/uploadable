@@ -12,7 +12,7 @@ trait HasUpload
 {
     public function saveFile(UploadedFile $file, $methodName)
     {
-        $options  = $this->{$methodName}();
+        $options  = $this->{$methodName}($file);
         $fileName = time() . '_' . $file->hashName();
         if (null !== $options->name) {
             $fileName = $options->name;
