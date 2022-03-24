@@ -10,7 +10,7 @@ class UploadOptions
     public $field;
     public $name;
     public $keepLargeSize = false;
-    public $keepOriginal = false;
+    public $keepOriginal  = false;
 
     public static function make()
     {
@@ -61,7 +61,7 @@ class UploadOptions
 
     public function path($path)
     {
-        $this->path = rtrim($path, '/').'/';
+        $this->path = rtrim($path, '/') . '/';
 
         return $this;
     }

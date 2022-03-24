@@ -2,19 +2,19 @@
 
 namespace Sedehi\Uploadable;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Http\UploadedFile;
+use Sedehi\Artist\Libs\ImageMaker;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Sedehi\Artist\Libs\ImageMaker;
 
 trait HasUpload
 {
     public function saveFile(UploadedFile $file, $methodName)
     {
-        $options = $this->{$methodName}();
+        $options  = $this->{$methodName}();
         $fileName = time() . '_' . $file->hashName();
-        if(!is_null($options->name)){
+        if (null !== $options->name) {
             $fileName = $options->name;
         }
         if ($this->isImage($fileName)) {
@@ -33,8 +33,7 @@ trait HasUpload
             }
             $image->store();
         } else {
-
-            File::move($temp->full_path, Storage::disk($options->disk)->path(rtrim($options->path, '/').'/'.$fileName));
+            File::move($temp->full_path, Storage::disk($options->disk)->path(rtrim($options->path, '/') . '/' . $fileName));
         }
         $temp->remove();
 
@@ -54,7 +53,7 @@ trait HasUpload
         if ($this->isImage($fileName)) {
             ImageMaker::make()->path($options->path)->disk($options->disk)->name($fileName)->remove();
         } else {
-            Storage::disk($options->disk)->delete(rtrim($options->path).'/'.Arr::get($this, $options->field));
+            Storage::disk($options->disk)->delete(rtrim($options->path) . '/' . Arr::get($this, $options->field));
         }
     }
 
